@@ -1,4 +1,4 @@
-package com.sevenander.lifeslicetest.utils;
+package com.sevenander.lifeslicetest.utils.callbacks;
 
 public interface FragmentCallback {
 

@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sevenander.lifeslicetest.R;
-import com.sevenander.lifeslicetest.utils.FragmentCallback;
+import com.sevenander.lifeslicetest.utils.callbacks.FragmentCallback;
 
 public class AFragment extends Fragment {
 

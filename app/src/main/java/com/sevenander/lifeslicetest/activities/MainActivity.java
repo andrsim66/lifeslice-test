@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.sevenander.lifeslicetest.R;
 import com.sevenander.lifeslicetest.adapters.TabsPagerAdapter;
-import com.sevenander.lifeslicetest.utils.FragmentCallback;
+import com.sevenander.lifeslicetest.utils.callbacks.FragmentCallback;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

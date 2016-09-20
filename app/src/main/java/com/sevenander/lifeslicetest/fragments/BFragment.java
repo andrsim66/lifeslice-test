@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +30,7 @@ import butterknife.ButterKnife;
 
 public class BFragment extends Fragment implements ListItemClickListener, OnPreparedListener, OnCompletionListener {
 
-    @Bind(R.id.rv_video_list) RecyclerView rvUserList;
+    @Bind(R.id.rv_video_list) RecyclerView rvVideoList;
     @Bind(R.id.em_video) EMVideoView emVideoView;
 
     private FragmentCallback mListener;
@@ -119,18 +120,14 @@ public class BFragment extends Fragment implements ListItemClickListener, OnPrep
                 VideoListHandler.getInstance().getItems(), this);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(
                 getActivity(), LinearLayoutManager.VERTICAL, false);
-        rvUserList.setLayoutManager(layoutManager);
-        rvUserList.setAdapter(adapter);
+        rvVideoList.setLayoutManager(layoutManager);
+        rvVideoList.setAdapter(adapter);
     }
 
-    private void refreshList() {
-//        if (adapter == null) {
-            adapter = new VideoListAdapter(getActivity(),
-                    VideoListHandler.getInstance().getItems(), this);
-            rvUserList.setAdapter(adapter);
-//        } else {
-//            adapter.notifyDataSetChanged();
-//        }
+    public void refreshList() {
+        adapter = new VideoListAdapter(getActivity(),
+                VideoListHandler.getInstance().getItems(), this);
+        rvVideoList.setAdapter(adapter);
     }
 
     @Override
@@ -183,11 +180,13 @@ public class BFragment extends Fragment implements ListItemClickListener, OnPrep
         }
     }
 
-    private void playVideo(int position) {
+    public void playVideo(int position) {
         adapter.highlightItem(position);
         Log.d("TAG1", "playing " + position);
         currentPlayPosition = position;
         String uri = VideoListHandler.getInstance().getItems().get(position).getVideoSrc();
-        emVideoView.setVideoURI(Uri.parse(uri));
+        if (!TextUtils.isEmpty(uri))
+            emVideoView.setVideoURI(Uri.parse(uri));
+        rvVideoList.scrollToPosition(position);
     }
 }

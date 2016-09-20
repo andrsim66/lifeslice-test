@@ -1,15 +1,18 @@
 package com.sevenander.lifeslicetest.fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.sevenander.lifeslicetest.R;
 import com.sevenander.lifeslicetest.model.VideoItem;
@@ -43,7 +46,7 @@ public class AFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_a, container, false);
         ButterKnife.bind(this, view);
-
+        setupEditText();
         return view;
     }
 
@@ -73,8 +76,10 @@ public class AFragment extends Fragment {
     @OnClick(R.id.b_next)
     public void onNextClick() {
         String tag = etSearchTag.getText().toString();
-        if (!TextUtils.isEmpty(tag))
+        if (!TextUtils.isEmpty(tag)) {
             requestVideo(tag);
+            hideKeyBoard();
+        }
     }
 
     private void requestVideo(String tag) {
@@ -97,5 +102,28 @@ public class AFragment extends Fragment {
                 Log.e("TAG1", t.toString());
             }
         });
+    }
+
+    private void setupEditText() {
+        etSearchTag.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    onNextClick();
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+    }
+
+    private void hideKeyBoard() {
+        View view = getActivity().getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)
+                    getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

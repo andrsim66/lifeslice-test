@@ -12,12 +12,16 @@ import com.sevenander.lifeslicetest.fragments.BFragment;
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     private String[] mTitles;
+    private AFragment aFragment;
+    private BFragment bFragment;
 
     public TabsPagerAdapter(FragmentManager fragmentManager, Context context) {
         super(fragmentManager);
         mTitles = new String[2];
         mTitles[0] = context.getResources().getString(R.string.title_tab1);
         mTitles[1] = context.getResources().getString(R.string.title_tab2);
+        aFragment = new AFragment();
+        bFragment = new BFragment();
     }
 
     @Override
@@ -34,9 +38,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new AFragment();
+                return aFragment;
             default:
-                return new BFragment();
+                return bFragment;
         }
     }
 }

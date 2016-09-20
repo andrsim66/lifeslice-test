@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sevenander.lifeslicetest.R;
-import com.sevenander.lifeslicetest.adapters.holders.UserViewHolder;
+import com.sevenander.lifeslicetest.adapters.holders.VideoItemViewHolder;
 import com.sevenander.lifeslicetest.model.VideoItem;
 import com.sevenander.lifeslicetest.utils.ImageUtils;
 import com.sevenander.lifeslicetest.utils.callbacks.ListItemClickListener;
@@ -38,8 +38,8 @@ public class VideoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         return initHolder(view);
     }
 
-    private UserViewHolder initHolder(View view) {
-        return new UserViewHolder(view, new UserViewHolder.ViewHolderClicks() {
+    private VideoItemViewHolder initHolder(View view) {
+        return new VideoItemViewHolder(view, new VideoItemViewHolder.ViewHolderClicks() {
             @Override
             public void onItemClick(int position) {
                 if (clickListener != null)
@@ -50,7 +50,7 @@ public class VideoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        UserViewHolder userHolder = (UserViewHolder) holder;
+        VideoItemViewHolder userHolder = (VideoItemViewHolder) holder;
 
         VideoItem videoItem = videoItems.get(position);
         userHolder.tvUserName.setText(videoItem.getUserName());

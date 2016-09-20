@@ -10,7 +10,7 @@ import com.sevenander.lifeslicetest.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class VideoItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     @Bind(R.id.iv_user_picture)
     public ImageView ivUserPicture;
@@ -19,7 +19,7 @@ public class UserViewHolder extends RecyclerView.ViewHolder implements View.OnCl
 
     protected ViewHolderClicks listener;
 
-    public UserViewHolder(View itemView, ViewHolderClicks listener) {
+    public VideoItemViewHolder(View itemView, ViewHolderClicks listener) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         itemView.setOnClickListener(this);

@@ -8,22 +8,26 @@ import android.view.ViewGroup;
 
 import com.sevenander.lifeslicetest.R;
 import com.sevenander.lifeslicetest.adapters.holders.UserViewHolder;
-import com.sevenander.lifeslicetest.model.User;
+import com.sevenander.lifeslicetest.model.VideoItem;
 import com.sevenander.lifeslicetest.utils.ImageUtils;
 import com.sevenander.lifeslicetest.utils.callbacks.ListItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class VideoListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<User> users;
+    private Context context;
+    private List<VideoItem> videoItems;
     private ListItemClickListener clickListener;
     private float thumbWidth;
+    private int currentPlayingPosition;
 
-    public UserListAdapter(Context context, List<User> users, ListItemClickListener clickListener) {
-        this.users = new ArrayList<>(users);
+    public VideoListAdapter(Context context, List<VideoItem> videoItems, ListItemClickListener clickListener) {
+        this.context = context;
+        this.videoItems = new ArrayList<>(videoItems);
         this.clickListener = clickListener;
+        this.currentPlayingPosition = -1;
         this.thumbWidth = context.getResources().getDimension(R.dimen.size_72dp);
     }
 
@@ -39,7 +43,7 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             @Override
             public void onItemClick(int position) {
                 if (clickListener != null)
-                    clickListener.onItemClick(users.get(position).getVideoSrc());
+                    clickListener.onItemClick(position);
             }
         });
     }
@@ -48,14 +52,31 @@ public class UserListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         UserViewHolder userHolder = (UserViewHolder) holder;
 
-        User user = users.get(position);
-        userHolder.tvUserName.setText(user.getUserName());
-        ImageUtils.setImage(user.getUserPhoto(), userHolder.ivUserPicture, thumbWidth);
+        VideoItem videoItem = videoItems.get(position);
+        userHolder.tvUserName.setText(videoItem.getUserName());
+        ImageUtils.setImage(videoItem.getUserPhoto(), userHolder.ivUserPicture, thumbWidth);
+
+        if (videoItem.isNowPlaying()) {
+            userHolder.tvUserName
+                    .setTextColor(context.getResources().getColor(R.color.colorPrimary));
+        } else {
+            userHolder.tvUserName
+                    .setTextColor(context.getResources().getColor(android.R.color.black));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return videoItems.size();
+    }
+
+    public void highlightItem(int position) {
+        if (currentPlayingPosition >= 0 && currentPlayingPosition < videoItems.size())
+            videoItems.get(currentPlayingPosition).setNowPlaying(false);
+        videoItems.get(position).setNowPlaying(true);
+        notifyItemChanged(currentPlayingPosition);
+        notifyItemChanged(position);
+        currentPlayingPosition = position;
     }
 
 //    public void addItem(MediaItem item) {

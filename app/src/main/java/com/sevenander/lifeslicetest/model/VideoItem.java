@@ -1,10 +1,17 @@
 package com.sevenander.lifeslicetest.model;
 
-public class User {
+import com.google.gson.annotations.SerializedName;
 
+public class VideoItem {
+
+    @SerializedName("username")
     private String userName;
+    @SerializedName("thumbnailUrl")
     private String userPhoto;
+    @SerializedName("videoLowURL")
     private String videoSrc;
+
+    private boolean nowPlaying;
 
     public String getUserName() {
         return userName;
@@ -28,5 +35,13 @@ public class User {
 
     public void setVideoSrc(String videoSrc) {
         this.videoSrc = videoSrc;
+    }
+
+    public boolean isNowPlaying() {
+        return nowPlaying;
+    }
+
+    public void setNowPlaying(boolean nowPlaying) {
+        this.nowPlaying = nowPlaying;
     }
 }

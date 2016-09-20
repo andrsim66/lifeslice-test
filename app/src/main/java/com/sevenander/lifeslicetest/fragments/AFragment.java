@@ -4,14 +4,33 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.sevenander.lifeslicetest.R;
+import com.sevenander.lifeslicetest.model.VideoItem;
+import com.sevenander.lifeslicetest.model.VideosResponse;
+import com.sevenander.lifeslicetest.rest.ApiClient;
+import com.sevenander.lifeslicetest.rest.ApiInterface;
+import com.sevenander.lifeslicetest.utils.VideoListHandler;
 import com.sevenander.lifeslicetest.utils.callbacks.FragmentCallback;
 
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class AFragment extends Fragment {
+
+    @Bind(R.id.et_search_tag) EditText etSearchTag;
 
     private FragmentCallback mListener;
 
@@ -19,19 +38,13 @@ public class AFragment extends Fragment {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_a, container, false);
-    }
+        View view = inflater.inflate(R.layout.fragment_a, container, false);
+        ButterKnife.bind(this, view);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onNextClick();
-        }
+        return view;
     }
 
     @Override
@@ -49,5 +62,40 @@ public class AFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
+    }
+
+    @OnClick(R.id.b_next)
+    public void onNextClick() {
+        String tag = etSearchTag.getText().toString();
+        if (!TextUtils.isEmpty(tag))
+            requestVideo(tag);
+    }
+
+    private void requestVideo(String tag) {
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<VideosResponse> call = apiService.getVideos(tag);
+        call.enqueue(new Callback<VideosResponse>() {
+            @Override
+            public void onResponse(Call<VideosResponse> call, Response<VideosResponse> response) {
+                List<VideoItem> items = response.body().getData().getItems();
+                Log.d("TAG1", "Number of videos received: " + items.size());
+                VideoListHandler.getInstance().addAll(items);
+                if (mListener != null)
+                    mListener.onNextClick();
+            }
+
+            @Override
+            public void onFailure(Call<VideosResponse> call, Throwable t) {
+                Log.e("TAG1", t.toString());
+            }
+        });
     }
 }

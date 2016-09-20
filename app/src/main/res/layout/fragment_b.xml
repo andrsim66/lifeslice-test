@@ -1,0 +1,19 @@
+<RelativeLayout xmlns:EMVideoView="http://schemas.android.com/apk/res-auto"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:context="com.sevenander.lifeslicetest.fragments.BFragment">
+
+    <com.devbrackets.android.exomedia.ui.widget.EMVideoView
+        android:id="@+id/em_video"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        EMVideoView:useDefaultControls="true"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_video_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/em_video"/>
+</RelativeLayout>
